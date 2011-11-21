@@ -67,7 +67,7 @@ Where:
 | @<type>@              | Define the ØMQ socket type, value can be: *PUB*, *SUB*, *REQ*,  *XREQ*. The default value is set to PUB |
 | @<bind>@              | The ØMQ socket will connect to the given address using "bind()":http://api.zeromq.org/2-1:zmq-bind method. Can be used only if socket is PUB or SUB type |
 | @<connect>@           | The ØMQ socket will connect to the given address using "connect()":http://api.zeromq.org/2-1:zmq-connect method  |
-| @<pattern>@		| The pattern defines the format of the ØMQ message that will be sent by the appender. The format used the same PatternLayout of the default Logback ConsoleAppender: http://logback.qos.ch/manual/layouts.html#ClassicPatternLayout|
+| @<pattern>@		| The pattern defines the format of the ØMQ message that will be sent by the appender. The format used the same PatternLayout of the default Logback "ConsoleAppender":http://logback.qos.ch/manual/layouts.html#ClassicPatternLayout|
 
 
 h2. Examples of user
