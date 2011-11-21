@@ -2,7 +2,7 @@ h1. Logback appender for ØMQ message transport layer
 
 This project must be used with the "Logback":http://logback.qos.ch/ project in order to produce log messages over "ZeroMQ":http://www.zeromq.org/ messaging library.
 
-This way, the application logs can be sent to remote systems / can be receive by remote systems.
+This way, the application logs can be sent to remote systems / can be receive by remote systems in any language supported by ØMQ.
 
 
 h2. Installation
@@ -64,16 +64,46 @@ The appender must be declared in the logback*.xml file:
 Where:
 
 |_. Property            |_. Description|
-| @<type>@              | Define the ØMQ socket type, can be: * PUB * SUB * REQ * XREQ Default is set to PUB |
-| @<bind>@              | The ØMQ socket will connect to the given address using "bind()":http://api.zeromq.org/2-1:zmq-bind method.
-
-Can be used only if socket is PUB or SUB type |
+| @<type>@              | Define the ØMQ socket type, value can be: *PUB*, *SUB*, *REQ*,  *XREQ*. The default value is set to PUB |
+| @<bind>@              | The ØMQ socket will connect to the given address using "bind()":http://api.zeromq.org/2-1:zmq-bind method. Can be used only if socket is PUB or SUB type |
 | @<connect>@           | The ØMQ socket will connect to the given address using "connect()":http://api.zeromq.org/2-1:zmq-connect method  |
-| @<pattern>@		| The pattern defines the format of the ØMQ message that will be sent by the appender.
-
-The format used the same PatternLayout of the default Logback ConsoleAppender: http://logback.qos.ch/manual/layouts.html#ClassicPatternLayout|
+| @<pattern>@		| The pattern defines the format of the ØMQ message that will be sent by the appender. The format used the same PatternLayout of the default Logback ConsoleAppender: http://logback.qos.ch/manual/layouts.html#ClassicPatternLayout|
 
 
+h2. Examples of user
+
+h3. Publish log messages
+
+h4. Description
+In this example, the log messages will be encapsualted in a ØMQ message and published by the appender on a given address.
+
+Remote applications (subscribers) can connect to the ØMQ publisher socket and start receiving messages. The subscribers can also filter by log level the messages they want to receive.
+
+h4. Configuration
+
+The configuration of the Logback appender defines a Publisher socket:
+
+<pre>
+ <appender name="zeromq-bind" class="org.tlrx.logback.appender.ZMQSocketAppender">
+        <type>PUB</type>
+        <bind>tcp://*:9797</bind>
+        <encoder>
+            <pattern>%-5level %logger{26} - %msg</pattern>
+        </encoder>
+    </appender>
+</pre>
+
+h4. At runtime
+
+Once started, the appender sends log messages like this:
+
+<pre>
+DEBUG org.eclipse.jetty.util.log - doSelect true
+</pre>
+
+Remote application can now connect to the publisher address to receive log messages. The @<ZMQSocketAppenderTest>@ gives an example of how to connect to the publisher and receive only ERROR messages.
+
+If no subscribers is connected, the publisher will drop the message (this is a default ØMQ behavior).
 
 
 
