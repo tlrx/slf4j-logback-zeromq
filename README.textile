@@ -15,7 +15,7 @@ The "ZeroMQ":http//www.zeromq.org/ website is a great place to start installing 
 
 If you want to develop or modify this plugin, I encourage you to read the "ØMQ - The Guide":http://zguide.zeromq.org/page:all which is very well documented.
 
-You must download slf4j-api.jar, logback-core.jar and logback-classic.jar on their respective project pages: "SLF4J":"http://www.slf4j.org/" and "Logback":"http://logback.qos.ch/".
+You must download slf4j-api.jar, logback-core.jar and logback-classic.jar on their respective project pages "SLF4J":http://www.slf4j.org/ and "Logback":http://logback.qos.ch/ .
 
 
 h3. Installation
