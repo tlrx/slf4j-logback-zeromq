@@ -75,6 +75,7 @@ h2. Examples of use
 h3. Publish log messages over TCP
 
 h4. Description
+
 In this example, the log messages will be encapsualted in a ØMQ message and published by the appender on a given address.
 
 Remote applications (subscribers) can connect to the ØMQ publisher socket and start receiving messages. The subscribers can also filter by log level the messages they want to receive.
