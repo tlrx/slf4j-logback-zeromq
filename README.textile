@@ -15,7 +15,7 @@ The "ZeroMQ":http//www.zeromq.org/ website is a great place to start installing 
 
 If you want to develop or modify this plugin, I encourage you to read the "ØMQ - The Guide":http://zguide.zeromq.org/page:all which is very well documented.
 
-You must download slf4j-api.jar, logback-core.jar and logback-classic.jar on their respective project pages: SLF4J:"http://www.slf4j.org/" and "Logback:"http://logback.qos.ch/ .
+You must download slf4j-api.jar, logback-core.jar and logback-classic.jar on their respective project pages: SLF4J:"http://www.slf4j.org/" and "Logback":"http://logback.qos.ch/ .
 
 
 h3. Installation
@@ -26,7 +26,7 @@ Put the following jar in the classpath of your Java application:
 slf4j-logback-zeromq-0.0.1.jar
 </pre>
 
-You must also put in the classpath the Java binding compiled for your system:
+You must also put in the classpath the ØMQ Java binding compiled for your system:
 
 <pre>
 jzmq-2.1.0.jar
@@ -140,6 +140,6 @@ In this configuration, the pattern for log messages reflects the format expected
 
 h4. At runtime
 
-Once started, the appender sends log messages to the Elasticsearch plugin, wich index them in the *logs* index.
+Once started, the appender sends log messages to the Elasticsearch plugin, which index them in the *logs* index.
 
  
