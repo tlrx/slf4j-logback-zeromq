@@ -1,0 +1,83 @@
+h1. Logback appender for ØMQ message transport layer
+
+This project must be used with the "Logback":http://logback.qos.ch/ project in order to produce log messages over "ZeroMQ":http://www.zeromq.org/ messaging library.
+
+This way, the application logs can be sent to remote systems / can be receive by remote systems.
+
+
+h2. Installation
+
+h3. Requirements
+
+Before installing and using this appender with Logback, you need to install ZeroMQ Java Binding library (2.1) on your system. This binding uses native library to work. 
+
+The "ZeroMQ":http//www.zeromq.org/ website is a great place to start installing the libraries, specially the "Java binding page":http://www.zeromq.org/bindings:java
+
+If you want to develop or modify this plugin, I encourage you to read the "ØMQ - The Guide":http://zguide.zeromq.org/page:all which is very well documented.
+
+You must download slf4j-api.jar, logback-core.jar and logback-classic.jar on their respective project pages: SLF4J:"http://www.slf4j.org/" and "Logback:"http://logback.qos.ch/ .
+
+
+h3. Installation
+
+Put the following jar in the classpath of your Java application:
+
+<pre>
+slf4j-logback-zeromq-0.0.1.jar
+</pre>
+
+You must also put in the classpath the Java binding compiled for your system:
+
+<pre>
+jzmq-2.1.0.jar
+</pre>
+
+Finally, put the SLF4J and Logback jars in the classpath:
+
+<pre>
+slf4j-api-1.6.4.jar
+logback-core-1.0.0.jar
+logback-classic-1.0.0.jar
+</pre>
+
+
+h3. Configuration
+
+The configuration of the ØMQ appender is done in the usual "Logback configuration file":http://logback.qos.ch/manual/configuration.html
+
+The appender must be declared in the logback*.xml file:
+
+<pre>
+	<appender name="zeromq-bind" class="org.tlrx.logback.appender.ZMQSocketAppender">
+		<!-- Define the ØMQ socket type -->
+		<type>PUB</type>
+		<!-- Only one of bind+connect must be declared -->
+		<bind>tcp://*:9797</bind>
+		<connect>tcp:localhost:9700</connect>
+		<encoder>
+			<!-- Message format -->
+			<pattern>%-5level %logger{26} - %msg</pattern>
+		</encoder>
+	</appender>
+</pre>
+
+Where:
+
+|_. Property            |_. Description|
+| @<type>@              | Define the ØMQ socket type, can be: |
+|                       | * PUB        |
+|                       | * SUB        |
+|                       | * REQ        |
+|                       | * XREQ       |
+|                       | Default is PUB |
+|                       |              |
+| @<bind>@              | The ØMQ socket will connect to the given address using "bind()":http://api.zeromq.org/2-1:zmq-bind method.
+|                       | Can be used only if socket is PUB or SUB type |
+| @<connect>@           | The ØMQ socket will connect to the given address using "connect()":http://api.zeromq.org/2-1:zmq-connect method  |
+| @<pattern>@		| The pattern defines the format of the ØMQ message that will be sent by the appender. |
+|			| The format used the same PatternLayout of the default Logback ConsoleAppender: http://logback.qos.ch/manual/layouts.html#ClassicPatternLayout|
+
+
+
+
+
