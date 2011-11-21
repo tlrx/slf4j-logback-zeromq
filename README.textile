@@ -72,7 +72,7 @@ Where:
 
 h2. Examples of user
 
-h3. Publish log messages
+h3. Publish log messages over TCP
 
 h4. Description
 In this example, the log messages will be encapsualted in a ØMQ message and published by the appender on a given address.
@@ -106,4 +106,39 @@ Remote application can now connect to the publisher address to receive log messa
 If no subscribers is connected, the publisher will drop the message (this is a default ØMQ behavior).
 
 
+h3. Index log messages in "Elasticsearch":http://www.elasticsearch.org/
 
+h4. Description
+
+In this example, the ØMQ appender is configured to send log messages to the "ØMQ transport plugin for Elasticsearch":https://github.com/tlrx/transport-zeromq 
+
+This way, it is possible to index and search log messages with Elasticsearch features.
+
+h4. Configuration
+
+The configuration of the Logback appender defines a XREQ socket:
+
+<pre>
+<configuration>
+...
+    <appender name="zeromq-connect" class="org.tlrx.logback.appender.ZMQSocketAppender">
+        <type>XREQ</type>
+        <connect>tcp://localhost:9700</connect>
+        <encoder>
+            <pattern>POST|/logs/log/|{"origin":"my_app", "level":"%-5level", "message":"%msg", "thread":"%thread", "date":"%d{HH:mm:ss.SSS}", "logger":"%logger{26}", "exception":"%ex"}</pattern>
+        </encoder>
+    </appender>
+...
+</configuration>
+
+</pre>
+
+The ØMQ transport plugin for Elasticsearch listen by default on the @<tcp://*:9700>@ address.
+
+In this configuration, the pattern for log messages reflects the format expected by the Elasticsearch plugin.
+
+h4. At runtime
+
+Once started, the appender sends log messages to the Elasticsearch plugin, wich index them.
+
+ 
