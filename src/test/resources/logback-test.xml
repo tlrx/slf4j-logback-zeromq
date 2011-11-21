@@ -1,0 +1,24 @@
+<configuration>
+
+    <!--Example appender for Elasticsearch zeromq transport plugin
+    <appender name="zeromq-connect" class="org.tlrx.logback.appender.ZMQSocketAppender">
+        <type>XREQ</type>
+        <connect>tcp://localhost:9700</connect>
+        <encoder>
+            <pattern>POST|/logs/log/|{"origin":"my_app", "level":"%-5level", "message":"%msg", "thread":"%thread", "date":"%d{HH:mm:ss.SSS}", "logger":"%logger{26}", "exception":"%ex"}</pattern>
+        </encoder>
+    </appender>
+     -->
+
+    <appender name="zeromq-bind" class="org.tlrx.logback.appender.ZMQSocketAppender">
+        <type>PUB</type>
+        <bind>tcp://*:9797</bind>
+        <encoder>
+            <pattern>%-5level %logger{26} - %msg</pattern>
+        </encoder>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="zeromq-bind"/>
+    </root>
+</configuration>
