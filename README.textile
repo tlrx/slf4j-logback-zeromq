@@ -64,13 +64,7 @@ The appender must be declared in the logback*.xml file:
 Where:
 
 |_. Property            |_. Description|
-| @<type>@              | Define the ØMQ socket type, can be: 
-* PUB
-* SUB
-* REQ
-* XREQ
-
-Default is set to PUB |
+| @<type>@              | Define the ØMQ socket type, can be: * PUB * SUB * REQ * XREQ Default is set to PUB |
 | @<bind>@              | The ØMQ socket will connect to the given address using "bind()":http://api.zeromq.org/2-1:zmq-bind method.
 
 Can be used only if socket is PUB or SUB type |
