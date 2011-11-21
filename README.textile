@@ -70,7 +70,7 @@ Where:
 | @<pattern>@		| The pattern defines the format of the ØMQ message that will be sent by the appender. The format used the same PatternLayout of the default Logback "ConsoleAppender":http://logback.qos.ch/manual/layouts.html#ClassicPatternLayout|
 
 
-h2. Examples of user
+h2. Examples of use
 
 h3. Publish log messages over TCP
 
