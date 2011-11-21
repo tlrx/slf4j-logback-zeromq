@@ -139,6 +139,6 @@ In this configuration, the pattern for log messages reflects the format expected
 
 h4. At runtime
 
-Once started, the appender sends log messages to the Elasticsearch plugin, wich index them.
+Once started, the appender sends log messages to the Elasticsearch plugin, wich index them in the *logs* index.
 
  
