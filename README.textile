@@ -102,7 +102,7 @@ Once started, the appender sends log messages like this:
 DEBUG org.eclipse.jetty.util.log - doSelect true
 </pre>
 
-Remote application can now connect to the publisher address to receive log messages. The @<ZMQSocketAppenderTest>@ gives an example of how to connect to the publisher and receive only ERROR messages.
+Remote application can now connect to the publisher address to receive log messages. The @ZMQSocketAppenderTest@ class gives an example of how to connect to the publisher and receive only ERROR messages.
 
 If no subscribers is connected, the publisher will drop the message (this is a default ØMQ behavior).
 
