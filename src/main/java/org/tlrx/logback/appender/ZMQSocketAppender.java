@@ -15,6 +15,7 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
     private String type;
     private String bind;
     private String connect;
+    private long highWaterMark = 10000L;
 
     private enum METHOD {
         BIND,
@@ -45,6 +46,14 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public long getHighWaterMark() {
+        return highWaterMark;
+    }
+
+    public void setHighWaterMark(long highWaterMark) {
+        this.highWaterMark = highWaterMark;
     }
 
     @Override
@@ -130,9 +139,15 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
                 break;
         }
 
+        if(highWaterMark<0){
+            addError("<highWaterMark> must not be >= 0");
+        }
+
         if (!error) {
             // Creates the zmq socket
             ZMQ.Socket socket = context.socket(socketType);
+
+            socket.setHWM(highWaterMark);
 
             if (method == METHOD.CONNECT) {
                 socket.connect(address);
