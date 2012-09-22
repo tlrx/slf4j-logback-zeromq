@@ -68,6 +68,7 @@ Where:
 | @<bind>@              | The ØMQ socket will connect to the given address using "bind()":http://api.zeromq.org/2-1:zmq-bind method. Can be used only if socket is PUB or SUB type |
 | @<connect>@           | The ØMQ socket will connect to the given address using "connect()":http://api.zeromq.org/2-1:zmq-connect method  |
 | @<pattern>@		| The pattern defines the format of the ØMQ message that will be sent by the appender. The format used the same PatternLayout of the default Logback "ConsoleAppender":http://logback.qos.ch/manual/layouts.html#ClassicPatternLayout|
+| @<highWaterMark>@     | A high water mark for the socket, after which messages will be discarded (if they're not sent). This prevents infinite buffering (and ergo infinite RAM use) if the thing you are sending to is down. Defaults to 10000 messages |
 
 
 h2. Examples of use
