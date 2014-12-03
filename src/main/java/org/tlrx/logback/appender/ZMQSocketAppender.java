@@ -72,8 +72,10 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
             socketType = ZMQ.XREQ;
         } else if ("pub".equalsIgnoreCase(type)) {
             socketType = ZMQ.PUB;
+        } else if ("push".equalsIgnoreCase(type)) {
+            socketType = ZMQ.PUSH;
         } else {
-            addWarn("[" + type + "] should be one of [REQ, XREQ, SUB]" + ", using default ØMQ socket type, PUB by default.");
+            addWarn("[" + type + "] should be one of [REQ, XREQ, SUB, PUSH]" + ", using default ØMQ socket type, PUB by default.");
             socketType = ZMQ.PUB;
         }
 
@@ -128,6 +130,20 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
                     address = connect;
                 } else {
                     addError("<connect> must not be null for XREQ sockets.");
+                    error = true;
+                }
+                break;
+                
+            case ZMQ.PUSH:
+                // Pub sockets can connect or bind
+                if (bind != null) {
+                    method = METHOD.BIND;
+                    address = bind;
+                } else if (connect != null) {
+                    method = METHOD.CONNECT;
+                    address = connect;
+                } else {
+                    addError("Either <connect> or <bind> must not be null for PUB sockets.");
                     error = true;
                 }
                 break;
