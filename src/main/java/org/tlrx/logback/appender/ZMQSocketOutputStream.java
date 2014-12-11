@@ -8,6 +8,7 @@ import java.nio.ByteBuffer;
 
 /**
  * @author tlrx
+ * @author prixeus
  */
 public class ZMQSocketOutputStream extends OutputStream {
 

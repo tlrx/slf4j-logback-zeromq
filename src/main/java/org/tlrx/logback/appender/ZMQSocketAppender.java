@@ -7,6 +7,7 @@ import org.zeromq.ZMQ;
  * A ØMQ socket appender for Logback
  *
  * @author tlrx
+ * @author prixeus
  */
 public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
 
@@ -27,7 +28,6 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
     public String getBind() {
         return bind;
     }
-
     public void setBind(String bind) {
         this.bind = bind;
     }
@@ -35,7 +35,6 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
     public String getConnect() {
         return connect;
     }
-
     public void setConnect(String connect) {
         this.connect = connect;
     }
@@ -43,7 +42,6 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
     public String getType() {
         return type;
     }
-
     public void setType(String type) {
         this.type = type;
     }
@@ -51,7 +49,6 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
     public long getHighWaterMark() {
         return highWaterMark;
     }
-
     public void setHighWaterMark(long highWaterMark) {
         this.highWaterMark = highWaterMark;
     }
