@@ -7,6 +7,7 @@ import org.zeromq.ZMQ;
  * A ØMQ socket appender for Logback
  *
  * @author tlrx
+ * @author prixeus
  */
 public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
 
@@ -15,6 +16,8 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
     private String type;
     private String bind;
     private String connect;
+    private String prefix;
+    private boolean sendMultipartEnabled = false;
     private long highWaterMark = 10000L;
 
     private enum METHOD {
@@ -27,7 +30,6 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
     public String getBind() {
         return bind;
     }
-
     public void setBind(String bind) {
         this.bind = bind;
     }
@@ -35,7 +37,6 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
     public String getConnect() {
         return connect;
     }
-
     public void setConnect(String connect) {
         this.connect = connect;
     }
@@ -43,7 +44,6 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
     public String getType() {
         return type;
     }
-
     public void setType(String type) {
         this.type = type;
     }
@@ -51,9 +51,22 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
     public long getHighWaterMark() {
         return highWaterMark;
     }
-
     public void setHighWaterMark(long highWaterMark) {
         this.highWaterMark = highWaterMark;
+    }
+
+    public boolean getSendMultipartEnabled() {
+        return sendMultipartEnabled;
+    }
+    public void setSendMultipartEnabled(boolean sendMultipartEnabled) {
+        this.sendMultipartEnabled = sendMultipartEnabled;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 
     @Override
@@ -72,8 +85,10 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
             socketType = ZMQ.XREQ;
         } else if ("pub".equalsIgnoreCase(type)) {
             socketType = ZMQ.PUB;
+        } else if ("push".equalsIgnoreCase(type)) {
+            socketType = ZMQ.PUSH;
         } else {
-            addWarn("[" + type + "] should be one of [REQ, XREQ, SUB]" + ", using default ØMQ socket type, PUB by default.");
+            addWarn("[" + type + "] should be one of [REQ, XREQ, SUB, PUSH]" + ", using default ØMQ socket type, PUB by default.");
             socketType = ZMQ.PUB;
         }
 
@@ -131,6 +146,20 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
                     error = true;
                 }
                 break;
+                
+            case ZMQ.PUSH:
+                // Pub sockets can connect or bind
+                if (bind != null) {
+                    method = METHOD.BIND;
+                    address = bind;
+                } else if (connect != null) {
+                    method = METHOD.CONNECT;
+                    address = connect;
+                } else {
+                    addError("Either <connect> or <bind> must not be null for PUB sockets.");
+                    error = true;
+                }
+                break;
 
             default:
                 // Should not happen
@@ -155,8 +184,17 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
                 socket.bind(address);
             }
 
+            String[] prefixArray = new String[0];
+            if (prefix != null) {
+                prefixArray = prefix.split("\\s+");
+            }
+
             // Set the socket as an OutputStream
-            outputStream = new ZMQSocketOutputStream(socket);
+            if (sendMultipartEnabled) {
+                outputStream = new ZMQSocketOutputStream(socket, prefixArray);
+            } else {
+                outputStream = new ZMQSocketOutputStream(socket);
+            }
             setOutputStream(outputStream);
 
             super.start();
