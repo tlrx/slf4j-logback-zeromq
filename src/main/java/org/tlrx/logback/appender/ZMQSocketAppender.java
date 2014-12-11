@@ -16,6 +16,8 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
     private String type;
     private String bind;
     private String connect;
+    private String prefix;
+    private boolean sendMultipartEnabled = false;
     private long highWaterMark = 10000L;
 
     private enum METHOD {
@@ -51,6 +53,20 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
     }
     public void setHighWaterMark(long highWaterMark) {
         this.highWaterMark = highWaterMark;
+    }
+
+    public boolean getSendMultipartEnabled() {
+        return sendMultipartEnabled;
+    }
+    public void setSendMultipartEnabled(boolean sendMultipartEnabled) {
+        this.sendMultipartEnabled = sendMultipartEnabled;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 
     @Override
@@ -168,8 +184,17 @@ public class ZMQSocketAppender<E> extends OutputStreamAppender<E> {
                 socket.bind(address);
             }
 
+            String[] prefixArray = new String[0];
+            if (prefix != null) {
+                prefixArray = prefix.split("\\s+");
+            }
+
             // Set the socket as an OutputStream
-            outputStream = new ZMQSocketOutputStream(socket);
+            if (sendMultipartEnabled) {
+                outputStream = new ZMQSocketOutputStream(socket, prefixArray);
+            } else {
+                outputStream = new ZMQSocketOutputStream(socket);
+            }
             setOutputStream(outputStream);
 
             super.start();
